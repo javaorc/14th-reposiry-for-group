@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.planModelMapper.ProductMapper">
+<resultMap id="productMap" type="com.cskaoyan.bean.planModelBean.Product">
+    <result column="product_id" property="productId"/>
+    <result column="product_name" property="productName"/>
+    <result column="product_type" property="productType"/>
+    <result column="image" property="image"/>
+    <result column="note" property="note"/>
+    <result column="status" property="status"/>
+</resultMap>
+    <select id="queryProduct" resultMap="productMap">
+        select product_id,product_name,product_type,image,note,status from product
+    </select>
+</mapper>
+
+
+
