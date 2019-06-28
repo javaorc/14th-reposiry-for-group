@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.planModelMapper.WorkMapper">
+<resultMap id="workMap" type="com.cskaoyan.bean.planModelBean.Work">
+    <result column="work_id" property="workId"/>
+    <result column="process_number" property="processNumber"/>
+    <result column="rating" property="rating"/>
+    <association property="product" javaType="com.cskaoyan.bean.planModelBean.Product">
+        <result column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_type" property="productType"/>
+        <result column="image" property="image"/>
+        <result column="note" property="note"/>
+        <result column="status" property="status"/>
+    </association>
+    <association property="process" javaType="com.cskaoyan.bean.planModelBean.Process">
+        <result column="process_id" property="processId"/>
+        <result column="technology_plan_id" property="technologyPlanId"/>
+        <result column="sequence" property="sequence"/>
+        <result column="quota" property="quota"/>
+    </association>
+    <association property="device" javaType="com.cskaoyan.bean.planModelBean.Device">
+        <result column="device_id" property="deviceId"/>
+        <result column="device_name" property="deviceName"/>
+        <result column="device_type_id" property="deviceTypeId"/>
+        <result column="device_status_id" property="deviceStatusId"/>
+        <result column="device_status" property="deviceStatus"/>
+        <result column="device_purchase_date" property="devicePurchaseDate"/>
+        <result column="device_purchase_price" property="devicePurchasePrice"/>
+        <result column="device_manufacture_date" property="deviceManufactureDate"/>
+        <result column="device_service_life" property="deviceServiceLife"/>
+        <result column="device_keeper_id" property="deviceKeeperId"/>
+        <result column="device_note" property="note"/>
+    </association>
+</resultMap>
+    <select id="queryWork" resultMap="workMap">
+        select
+        work.work_id,
+        work.process_number,
+        work.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image,
+        product.note,
+        product.status,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+        from work
+        LEFT JOIN device
+        ON work.device_id=device.device_id
+        LEFT JOIN product
+        ON work.product_id=product.product_id
+        left join	process
+        on work.process_id=process.process_id;
+    </select>
+</mapper>
+
+
+
+
+
+
+
