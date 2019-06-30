@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.planModelMapper.CustomMapper">
+<resultMap id="customMap" type="com.cskaoyan.bean.planModelBean.Custom">
+    <result column="custom_id" property="customId"/>
+    <result column="custom_name" property="customName"/>
+    <result column="full_name" property="fullName"/>
+    <result column="address" property="address"/>
+    <result column="fax" property="fax"/>
+    <result column="email" property="email"/>
+    <result column="owner_name" property="ownerName"/>
+    <result column="owner_tel" property="ownerTel"/>
+    <result column="status" property="status"/>
+    <result column="note" property="note"/>
+</resultMap>
+    <select id="queryCustom" resultMap="customMap">
+        select custom_id,custom_name,full_name,address,fax,email,
+        owner_name,owner_tel,status, note
+        from custom
+    </select>
+
+
+    <update id="insertCustom" >
+        insert into custom(custom_id,custom_name,full_name,address,fax,email,
+        owner_name,owner_tel,status,note)
+        values(#{custom.customId},#{custom.customName},#{custom.fullName}
+        ,#{custom.address},#{custom.fax},#{custom.email},
+        #{custom.ownerName},#{custom.ownerTel},#{custom.status},#{custom.note})
+    </update>
+
+    <select id="queryCustomById" resultMap="customMap">
+        select custom_id,custom_name,full_name,address,fax,email,
+        owner_name,owner_tel,status, note
+        from custom where custom_id=#{id}
+    </select>
+
+    <update id="updateCustom">
+        update custom set custom_id=#{custom.customId},custom_name=#{custom.customName},
+        full_name=#{custom.fullName},address=#{custom.address},fax=#{custom.fax},email=#{custom.email},
+        owner_name=#{custom.ownerName},owner_tel=#{custom.ownerTel},status=#{custom.status},
+        note=#{custom.note} where custom_id=#{custom.customId}
+    </update>
+
+    <delete id="deleteCustom">
+        delete from custom where custom_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="searchCidByCname" resultType="string">
+        select custom_id from custom where
+        custom_name LIKE CONCAT(CONCAT('%', #{cname}), '%')
+    </select>
+
+
+
+    <select id="searchCustomByCid" resultMap="customMap">
+        select
+         custom_id,custom_name,full_name,address,fax,email,
+        owner_name,owner_tel,status, note
+         from custom where
+        custom_id LIKE CONCAT(CONCAT('%', #{cid}), '%')
+    </select>
+</mapper>
+
+
+
+
+
+
+
