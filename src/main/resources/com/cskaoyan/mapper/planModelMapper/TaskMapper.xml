@@ -53,13 +53,13 @@
                 <result column="customNote" property="note"/>
             </association>
 
-            <collection property="product" ofType="com.cskaoyan.bean.planModelBean.Product">
+            <association property="product" javaType="com.cskaoyan.bean.planModelBean.Product">
                 <result column="product_name" property="productName"/>
                 <result column="product_type" property="productType"/>
                 <result column="productImage" property="image"/>
                 <result column="productNote" property="note"/>
                 <result column="productStatus" property="status"/>
-            </collection>
+            </association>
 
         </association>
         </association>
@@ -195,9 +195,321 @@
         #LEFT JOIN product ON work.product_id=product.product_id
         left join	process on work.process_id=process.process_id;
 
-
-
     </select>
+
+    <insert id="insertTask">
+        insert into task(task_id,manufacture_sn,work_id,task_quantity,working_hours)
+        values(#{task.taskId},#{task.manufactureSn},#{task.workId}
+        ,#{task.taskQuantity},#{task.workingHours})
+
+    </insert>
+
+
+    <update id="updateTask">
+        update  task set  task_id=#{task.taskId},manufacture_sn=#{task.manufactureSn},
+        work_id=#{task.workId},task_quantity=#{task.taskQuantity},
+        working_hours=#{task.workingHours} where task_id=#{task.taskId}
+    </update>
+
+
+    <delete id="deleteTask">
+        delete from task where task_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="searchTaskById" resultMap="taskMap">
+       select
+
+        task.task_id,
+        task.task_quantity,
+        task.working_hours,
+        task.manufacture_sn,
+		task.work_id,
+
+        manufacture.manufacture_sn as manufactureNum,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.end_date,
+
+        technology.technology_id as technologyId,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id as orderId,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id as customId,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+        #product.product_id as productId,
+        # product.product_name,
+        # product.product_type,
+        # product.image as productImage,
+        # product.note as productNote,
+        # product.status as productStatus,
+
+        `work`.work_id,
+        `work`.process_number,
+        `work`.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage ,
+        product.note as productNote,
+        product.status as productStatus,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+
+        from task
+
+        LEFT JOIN manufacture on task.manufacture_sn=manufacture.manufacture_sn
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON	manufacture.order_id=c_order.order_id
+        left join custom on c_order.custom_id=custom.custom_id
+        LEFT JOIN product on c_order.product_id=product.product_id
+
+        left JOIN work on task.work_id=work.work_id
+        LEFT JOIN device ON work.device_id=device.device_id
+        #LEFT JOIN product ON work.product_id=product.product_id
+        left join	process on work.process_id=process.process_id
+        where task.task_id LIKE CONCAT(CONCAT('%', #{tid}), '%')
+    </select>
+
+
+    <select id="searchTaskByTaskWorkId" resultMap="taskMap">
+       select
+
+        task.task_id,
+        task.task_quantity,
+        task.working_hours,
+        task.manufacture_sn,
+		task.work_id,
+
+        manufacture.manufacture_sn as manufactureNum,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.end_date,
+
+        technology.technology_id as technologyId,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id as orderId,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id as customId,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+        #product.product_id as productId,
+        # product.product_name,
+        # product.product_type,
+        # product.image as productImage,
+        # product.note as productNote,
+        # product.status as productStatus,
+
+        `work`.work_id,
+        `work`.process_number,
+        `work`.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage ,
+        product.note as productNote,
+        product.status as productStatus,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+
+        from task
+
+        LEFT JOIN manufacture on task.manufacture_sn=manufacture.manufacture_sn
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON	manufacture.order_id=c_order.order_id
+        left join custom on c_order.custom_id=custom.custom_id
+        LEFT JOIN product on c_order.product_id=product.product_id
+
+        left JOIN work on task.work_id=work.work_id
+        LEFT JOIN device ON work.device_id=device.device_id
+        #LEFT JOIN product ON work.product_id=product.product_id
+        left join	process on work.process_id=process.process_id
+        where `work`.work_id LIKE CONCAT(CONCAT('%', #{twid}), '%')
+    </select>
+
+
+    <select id="searchTaskByTaskManuId" resultMap="taskMap">
+       select
+
+        task.task_id,
+        task.task_quantity,
+        task.working_hours,
+        task.manufacture_sn,
+		task.work_id,
+
+        manufacture.manufacture_sn as manufactureNum,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.end_date,
+
+        technology.technology_id as technologyId,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id as orderId,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id as customId,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+        #product.product_id as productId,
+        # product.product_name,
+        # product.product_type,
+        # product.image as productImage,
+        # product.note as productNote,
+        # product.status as productStatus,
+
+        `work`.work_id,
+        `work`.process_number,
+        `work`.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage ,
+        product.note as productNote,
+        product.status as productStatus,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+
+        from task
+
+        LEFT JOIN manufacture on task.manufacture_sn=manufacture.manufacture_sn
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON	manufacture.order_id=c_order.order_id
+        left join custom on c_order.custom_id=custom.custom_id
+        LEFT JOIN product on c_order.product_id=product.product_id
+
+        left JOIN work on task.work_id=work.work_id
+        LEFT JOIN device ON work.device_id=device.device_id
+        #LEFT JOIN product ON work.product_id=product.product_id
+        left join	process on work.process_id=process.process_id
+        where task.manufacture_sn LIKE CONCAT(CONCAT('%', #{tmid}), '%')
+    </select>
+
 </mapper>
 
 

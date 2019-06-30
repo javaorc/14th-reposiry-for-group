@@ -23,6 +23,7 @@
         <property name="dataSource" ref="myds"/>
     </bean>
 
+
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.cskaoyan.mapper"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>

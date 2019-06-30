@@ -26,4 +26,29 @@ public class CustomServiceImpl implements CustomService {
 	public int insertCustom(Custom custom) {
 		return customMapper.insertCustom(custom);
 	}
+
+	@Override
+	public Custom queryCustomById(String id) {
+		return customMapper.queryCustomById(id);
+	}
+
+	@Override
+	public int updateCustom(Custom custom) {
+		return customMapper.updateCustom(custom);
+	}
+
+	@Override
+	public int deleteCustom(String[] ids) {
+		return customMapper.deleteCustom(ids);
+	}
+
+	@Override
+	public String[] searchCidByCname(String valueCName) {
+		return customMapper.searchCidByCname(valueCName);
+	}
+
+    @Override
+    public List<Custom> searchCustomByCid(String valueId) {
+        return customMapper.searchCustomByCid(valueId);
+    }
 }

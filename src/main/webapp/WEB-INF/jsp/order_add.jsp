@@ -9,7 +9,7 @@
 <script type="text/javascript" charset="utf-8" src="js/kindeditor-4.1.10/lang/zh_CN.js"></script>
 
 <div style="padding:10px 10px 10px 10px">
-	<form id="orderAddForm" class="orderForm" method="post">
+	<form id="orderAddForm" class="orderForm" method="post" >
 	    <table cellpadding="5" >
 	        <tr>
 	            <td>订单编号:</td>

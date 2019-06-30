@@ -14,6 +14,7 @@ public class Device {
 
     private Date   devicePurchaseDate;
 
+
     private BigDecimal devicePurchasePrice;
 
     private Date   deviceManufactureDate;

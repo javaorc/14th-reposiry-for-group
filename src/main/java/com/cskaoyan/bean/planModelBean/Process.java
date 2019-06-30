@@ -1,9 +1,9 @@
 package com.cskaoyan.bean.planModelBean;
 
 public class Process {
-    private String processId;
+    private String  processId;
 
-    private String technologyPlanId;
+    private String  technologyPlanId;
 
     private Integer sequence;
 

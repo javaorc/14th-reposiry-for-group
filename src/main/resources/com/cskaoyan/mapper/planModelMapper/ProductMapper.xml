@@ -14,6 +14,46 @@
     <select id="queryProduct" resultMap="productMap">
         select product_id,product_name,product_type,image,note,status from product
     </select>
+
+
+    <update id="insertProduct" >
+        insert into product(product_name,product_id,product_type,image,note,status)
+        values(#{product.productName},#{product.productId},#{product.productType},#{product.image},#{product.note},#{product.status})
+    </update>
+
+    <select id="queryProductById" resultMap="productMap">
+        select product_id,product_name,product_type,image,note,status from product where product_id=#{id}
+    </select>
+
+    <update id="updateProduct">
+        update product set product_id=#{product.productId},product_name=#{product.productName},
+        product_type=#{product.productType},image=#{product.image},note=#{product.note},
+        status=#{product.status} where product_id=#{product.productId}
+    </update>
+
+    <delete id="deleteProduct">
+        delete from product where product_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="searchPidByPname" resultType="string">
+        select product_id from product where
+        product_name LIKE CONCAT(CONCAT('%', #{pname}), '%')
+    </select>
+
+    <select id="searchProductByPid" resultMap="productMap">
+        select product_id,product_name,product_type,image,note,status
+         from product where
+        product_id LIKE CONCAT(CONCAT('%', #{pid}), '%')
+    </select>
+
+    <select id="searchProductByPtype" resultMap="productMap">
+        select product_id,product_name,product_type,image,note,status
+         from product where
+        product_type LIKE CONCAT(CONCAT('%', #{ptype}), '%')
+    </select>
 </mapper>
 
 

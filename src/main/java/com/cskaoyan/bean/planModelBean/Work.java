@@ -7,6 +7,36 @@ public class Work {
 
     private Integer rating;
 
+    private String productId;
+
+    private String ProcessId;
+
+    private String DeviceId;
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProcessId() {
+        return ProcessId;
+    }
+
+    public void setProcessId(String processId) {
+        ProcessId = processId;
+    }
+
+    public String getDeviceId() {
+        return DeviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        DeviceId = deviceId;
+    }
+
     private Product product;
 
     private Process process;

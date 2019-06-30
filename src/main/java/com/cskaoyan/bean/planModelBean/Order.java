@@ -27,12 +27,12 @@ public class Order {
 
     private Custom custom;
 
-    private List<Product> product;
+    private Product product;
 
     public Order() {
     }
 
-    public Order(String orderId, Date orderDate, Date requestDate, String note, Integer quantity, BigDecimal unitPrice, String unit, String image, String file, Integer status, Custom custom, List<Product> product) {
+    public Order(String orderId, Date orderDate, Date requestDate, String note, Integer quantity, BigDecimal unitPrice, String unit, String image, String file, Integer status, Custom custom, Product product) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.requestDate = requestDate;
@@ -135,11 +135,11 @@ public class Order {
         this.custom = custom;
     }
 
-    public List<Product> getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(List<Product> product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

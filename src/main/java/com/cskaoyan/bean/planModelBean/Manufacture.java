@@ -11,11 +11,31 @@ public class Manufacture {
 
     private Date    endDate;
 
+    private String orderId;
+
+    private String technologyId;
+
     private Order cOrder;
 
     private Technology technology;
 
     public Manufacture() {
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getTechnologyId() {
+        return technologyId;
+    }
+
+    public void setTechnologyId(String technologyId) {
+        this.technologyId = technologyId;
     }
 
     public Manufacture(String manufactureSn, Integer launchQuantity, Date beginDate, Date endDate, Order order, Technology technology) {

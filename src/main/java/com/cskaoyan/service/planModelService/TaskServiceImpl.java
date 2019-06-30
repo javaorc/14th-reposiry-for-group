@@ -14,4 +14,34 @@ public class TaskServiceImpl implements TaskService{
     public List<Task> queryTask() {
         return taskMapper.queryTask();
     }
+
+    @Override
+    public int insertTask(Task task) {
+        return taskMapper.insertTask(task);
+    }
+
+    @Override
+    public int updateTask(Task task) {
+        return taskMapper.updateTask(task);
+    }
+
+    @Override
+    public int deleteTask(String[] TaskIds) {
+        return taskMapper.deleteTask(TaskIds);
+    }
+
+    @Override
+    public List<Task> searchTaskById(String valueTid) {
+        return taskMapper.searchTaskById(valueTid);
+    }
+
+    @Override
+    public List<Task> searchTaskByTaskWorkId(String valueTWid) {
+        return taskMapper.searchTaskByTaskWorkId(valueTWid);
+    }
+
+    @Override
+    public List<Task> searchTaskByTaskManuId(String valueTWid) {
+        return taskMapper.searchTaskByTaskManuId(valueTWid);
+    }
 }

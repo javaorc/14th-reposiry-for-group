@@ -12,4 +12,12 @@ public interface CustomService {
 
 	List<Custom> queryCustom();
 	int insertCustom(Custom custom);
+	Custom queryCustomById( String id);
+	int updateCustom( Custom custom);
+
+	int deleteCustom(String[] ids);
+
+	String[] searchCidByCname( String valueCName);
+
+	List<Custom> searchCustomByCid( String valueId);
 }

@@ -3,13 +3,13 @@ package com.cskaoyan.bean.planModelBean;
 import java.math.BigDecimal;
 
 public class Technology {
-    private String technologyId;
+    private String  technologyId;
 
-    private String technologyName;
+    private String  technologyName;
 
     private BigDecimal price;
 
-    private String vitalProcessPeriod;
+    private String  vitalProcessPeriod;
 
     private Integer standardCapacity;
 

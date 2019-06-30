@@ -72,6 +72,212 @@
         left join	process
         on work.process_id=process.process_id;
     </select>
+
+    <insert id="insertWork">
+        insert into work (work_id,process_number,product_id,process_id,device_id,rating)
+        values(#{work.workId},#{work.processNumber},#{productId},#{processId},#{deviceId},#{work.rating})
+    </insert>
+<resultMap id="workIdMap" type="com.cskaoyan.bean.planModelBean.Work">
+    <result column="work_id" property="workId"/>
+    <result column="process_number" property="processNumber"/>
+    <result column="rating" property="rating"/>
+    <result column="product_id" property="productId"/>
+    <result column="process_id" property="processId"/>
+    <result column="device_id" property="deviceId"/>
+</resultMap>
+    
+    <select id="queryWorkById" resultMap="workMap">
+        select
+        work_id,
+        process_number,
+        product_id,
+        process_id,
+        device_id,
+        rating from work where work_id=#{id}
+    </select>
+
+    <update id="updateWork">
+        update work set work_id=#{work.workId},
+        process_number=#{work.processNumber},
+        product_id=#{work.productId},
+        process_id=#{work.processId},
+        device_id=#{work.deviceId},
+        rating=#{work.rating} where work_id=#{work.workId}
+    </update>
+
+
+    <delete id="deleteWork">
+        delete from work where work_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="searchWorkByWorkId" resultMap="workMap">
+        select
+        work.work_id,
+        work.process_number,
+        work.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image,
+        product.note,
+        product.status,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+        from work
+        LEFT JOIN device
+        ON work.device_id=device.device_id
+        LEFT JOIN product
+        ON work.product_id=product.product_id
+        left join	process
+        on work.process_id=process.process_id
+         where
+        work.work_id LIKE CONCAT(CONCAT('%', #{wid}), '%')
+    </select>
+
+
+
+
+    <select id="searchWorkByPid" resultMap="workMap">
+        select
+        work.work_id,
+        work.process_number,
+        work.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image,
+        product.note,
+        product.status,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+        from work
+        LEFT JOIN device
+        ON work.device_id=device.device_id
+        LEFT JOIN product
+        ON work.product_id=product.product_id
+        left join	process
+        on work.process_id=process.process_id
+         where
+        work.product_id =#{pid}
+    </select>
+
+    <select id="searchWorkByDname" resultMap="workMap">
+        select
+        work.work_id,
+        work.process_number,
+        work.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image,
+        product.note,
+        product.status,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+        from work
+        LEFT JOIN device
+        ON work.device_id=device.device_id
+        LEFT JOIN product
+        ON work.product_id=product.product_id
+        left join	process
+        on work.process_id=process.process_id
+         where
+        device.device_name LIKE CONCAT(CONCAT('%', #{dname}), '%')
+    </select>
+
+
+
+    <select id="searchWorkByProId" resultMap="workMap">
+        select
+        work.work_id,
+        work.process_number,
+        work.rating,
+
+        product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image,
+        product.note,
+        product.status,
+
+        process.process_id,
+        process.technology_plan_id,
+        process.sequence,
+        process.quota,
+
+        device.device_id,
+        device.device_name,
+        device.device_type_id,
+        device.device_status_id,
+        device.device_status,
+        device.device_purchase_date,
+        device.device_purchase_price,
+        device.device_manufacture_date,
+        device.device_service_life,
+        device.device_keeper_id,
+        device.note as device_note
+        from work
+        LEFT JOIN device
+        ON work.device_id=device.device_id
+        LEFT JOIN product
+        ON work.product_id=product.product_id
+        left join	process
+        on work.process_id=process.process_id
+         where
+        work.device_id LIKE CONCAT(CONCAT('%', #{proid}), '%')
+    </select>
+
 </mapper>
 
 

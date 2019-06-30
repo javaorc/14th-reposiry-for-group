@@ -1,15 +1,15 @@
 package com.cskaoyan.bean.planModelBean;
 
 public class Task {
-    private String taskId;
+    private String  taskId;
 
     private Integer taskQuantity;
 
-    private Long workingHours;
+    private Long    workingHours;
 
-    private String manufactureSn;
+    private String  manufactureSn;
 
-    private String workId;
+    private String  workId;
 
     private Work work;
 

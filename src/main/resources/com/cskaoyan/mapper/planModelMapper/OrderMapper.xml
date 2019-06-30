@@ -27,13 +27,14 @@
             <result column="productStatus" property="status"/>
             <result column="productNote" property="note"/>
         </association>
-        <collection property="product" ofType="com.cskaoyan.bean.planModelBean.Product">
+        <association property="product" javaType="com.cskaoyan.bean.planModelBean.Product">
+            <result column="product_id" property="productId"/>
             <result column="product_name" property="productName"/>
             <result column="product_type" property="productType"/>
             <result column="productImage" property="image"/>
             <result column="productNote" property="note"/>
             <result column="productStatus" property="status"/>
-        </collection>
+        </association>
     </resultMap>
     <select id="queryOrder" resultMap="orderMap">
         select
@@ -74,4 +75,104 @@
 
 
     </select>
+
+
+    <insert id="insertOrder" >
+        insert into c_order(order_id,custom_id,product_id,note,quantity,unit_price,unit, order_date,
+        request_date,image,file,status)
+        values(#{order.orderId},#{customId},#{productId},
+        #{order.note},#{order.quantity},#{order.unitPrice},#{order.unit},#{order.orderDate},#{order.requestDate},#{order.image}
+        ,#{order.file},#{order.status})
+    </insert>
+
+    <select id="queryOrderById" resultMap="orderMap">
+      select
+       order_id,
+       custom_id,
+       product_id,
+       order_date,
+       request_date,
+       note,
+       quantity,
+       unit_price,
+       unit,
+       image,
+       file,
+       status
+       from c_order where order_id=#{id}
+    </select>
+
+    <update id="updateOrder">
+        update c_order set order_id=#{id},custom_id=#{order.custom.customId},product_id=#{order.product.productId},
+        note=#{order.note},quantity=#{order.quantity},unit_price=#{order.unitPrice},
+        unit=#{order.unit}, order_date=#{order.orderDate},
+        request_date=#{order.requestDate},image=#{order.image},file=#{order.file},
+        status=#{order.status} where order_id=#{id}
+    </update>
+
+    <delete id="deleteOrder">
+        delete from c_order where order_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="searchOrderById" resultMap="orderMap">
+      select
+       order_id,
+       custom_id,
+       product_id,
+       order_date,
+       request_date,
+       note,
+       quantity,
+       unit_price,
+       unit,
+       image,
+       file,
+       status
+       from c_order where order_id LIKE CONCAT(CONCAT('%', #{id}), '%')
+    </select>
+    <select id="searchOrderByCustomName" resultMap="orderMap">
+      select
+       order_id,
+       custom_id,
+       product_id,
+       order_date,
+       request_date,
+       note,
+       quantity,
+       unit_price,
+       unit,
+       image,
+       file,
+       status
+       from c_order where custom_id in
+       <foreach collection="cids" item="cid" separator="," open="(" close=")">
+           #{cid}
+       </foreach>
+    </select>
+
+    <select id="searchOrderByProductName" resultMap="orderMap">
+        select
+        order_id,
+        custom_id,
+        product_id,
+        order_date,
+        request_date,
+        note,
+        quantity,
+        unit_price,
+        unit,
+        image,
+        file,
+        status
+        from c_order where product_id in
+        <foreach collection="pids" item="pid" separator="," open="(" close=")">
+            #{pid}
+        </foreach>
+    </select>
+
+
+
 </mapper>

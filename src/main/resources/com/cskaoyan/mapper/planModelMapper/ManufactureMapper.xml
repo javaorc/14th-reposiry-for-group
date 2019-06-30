@@ -106,7 +106,217 @@
         LEFT JOIN product
         on c_order.product_id=product.product_id;
 
+    </select>
+
+    <insert id="insertManufacture">
+        insert into manufacture(manufacture_sn,order_id,technology_id
+        ,launch_quantity,begin_date,end_date) values(#{manu.manufactureSn},
+        #{orderId},#{techId},#{manu.launchQuantity},#{manu.beginDate},#{manu.endDate})
+    </insert>
+<resultMap id="manuMap" type="com.cskaoyan.bean.planModelBean.Manufacture">
+    <result column="manufacture_sn" property="manufactureSn"/>
+    <result column="order_id" property="orderId"/>
+    <result column="technology_id" property="technologyId"/>
+    <result column="launch_quantity" property="launchQuantity"/>
+    <result column="begin_date" property="beginDate"/>
+    <result column="end_date" property="endDate"/>
+</resultMap>
+    <select id="queryManuById" resultMap="manuMap">
+        select
+        manufacture_sn,
+        order_id,
+        technology_id
+        launch_quantity,
+        begin_date,
+        end_date
+        from manufacture where  manufacture_sn=#{id}
+
+    </select>
 
 
+    <update id="updateManu">
+        update manufacture set
+        order_id=#{manu.orderId},
+        technology_id=#{manu.technologyId},
+        launch_quantity=#{manu.launchQuantity},
+        begin_date=#{manu.beginDate},
+        end_date=#{manu.endDate}
+        where  manufacture_sn=#{manu.manufactureSn}
+    </update>
+
+
+    <delete id="deleteManu">
+        delete from manufacture where manufacture_sn in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="searchManuByMsn" resultMap="manufactureMap">
+        select
+        manufacture.manufacture_sn,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.begin_date,
+
+        technology.technology_id,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+		product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage,
+        product.note as productNote,
+        product.status as productStatus
+
+        from manufacture
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON manufacture.order_id=c_order.order_id
+        left join custom
+        on c_order.custom_id=custom.custom_id
+        LEFT JOIN product
+        on c_order.product_id=product.product_id
+        where  manufacture.manufacture_sn LIKE CONCAT(CONCAT('%', #{msn}), '%')
+    </select>
+
+    <select id="searchManuByOId" resultMap="manufactureMap">
+        select
+        manufacture.manufacture_sn,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.begin_date,
+
+        technology.technology_id,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+		product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage,
+        product.note as productNote,
+        product.status as productStatus
+
+        from manufacture
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON manufacture.order_id=c_order.order_id
+        left join custom
+        on c_order.custom_id=custom.custom_id
+        LEFT JOIN product
+        on c_order.product_id=product.product_id
+        where  c_order.order_id LIKE CONCAT(CONCAT('%', #{oid}), '%')
+    </select>
+
+    <select id="searchManuByTname" resultMap="manufactureMap">
+        select
+        manufacture.manufacture_sn,
+        manufacture.launch_quantity,
+        manufacture.begin_date,
+        manufacture.begin_date,
+
+        technology.technology_id,
+        technology.technology_name,
+        technology.price,
+        technology.vital_process_period,
+        technology.standard_capacity,
+        technology.overtime_standard_capacity,
+        technology.overtime_overfulfil_capacity,
+        technology.double_capacity,
+        technology.overfulfil_capacity,
+
+        c_order.order_id,
+        c_order.order_date,
+        c_order.request_date,
+        c_order.note,
+        c_order.quantity,
+        c_order.unit_price,
+        c_order.unit,
+        c_order.image,
+        c_order.file,
+        c_order.status,
+
+        custom.custom_id,
+        custom.custom_name,
+        custom.full_name,
+        custom.address,
+        custom.fax,
+        custom.email,
+        custom.owner_name,
+        custom.owner_tel,
+        custom.status as customStatus,
+        custom.note as customNote,
+
+		product.product_id,
+        product.product_name,
+        product.product_type,
+        product.image as productImage,
+        product.note as productNote,
+        product.status as productStatus
+
+        from manufacture
+        LEFT join technology on technology.technology_id=manufacture.technology_id
+        left join c_order ON manufacture.order_id=c_order.order_id
+        left join custom
+        on c_order.custom_id=custom.custom_id
+        LEFT JOIN product
+        on c_order.product_id=product.product_id
+        where  technology.technology_name LIKE CONCAT(CONCAT('%', #{tname}), '%')
     </select>
 </mapper>
