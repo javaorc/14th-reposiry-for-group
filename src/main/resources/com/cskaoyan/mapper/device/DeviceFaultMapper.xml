@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.device.DeviceFaultMapper">
+    <select id="queryDeviceFaultpage" resultMap="queryDeviceFault">
+        select a.device_fault_cause,a.device_fault_date,a.device_fault_detail,
+        a.device_fault_id,a.device_fault_maintenance,a.device_id,b.device_name
+          from device_fault a,device b where a.device_id = b.device_id
+    </select>
+    <resultMap id="queryDeviceFault" type="com.cskaoyan.bean.device.DeviceFault">
+        <result column="device_fault_cause" property="deviceFaultCause"/>
+        <result column="device_fault_date" property="deviceFaultDate"/>
+        <result column="device_fault_detail" property="deviceFaultDetail"/>
+        <result column="device_fault_id" property="deviceFaultId"/>
+        <result column="device_fault_maintenance" property="deviceFaultMaintenance"/>
+        <result column="device_id" property="deviceId"/>
+        <result column="device_name" property="deviceName"/>
+    </resultMap>
+
+    <insert id="addDeviceFault">
+        insert into device_fault (device_fault_id,device_id,
+        device_fault_date,device_fault_cause,device_fault_maintenance,
+        device_fault_detail) values (#{dev.deviceFaultId},#{dev.deviceId},
+        #{dev.deviceFaultDate},#{dev.deviceFaultCause},#{dev.deviceFaultMaintenance},
+        #{dev.deviceFaultDetail})
+    </insert>
+
+    <update id="updateDeviceFault">
+        update device_fault set
+        device_id = #{dev.deviceId},device_fault_date = #{dev.deviceFaultDate},
+        device_fault_cause = #{dev.deviceFaultCause},device_fault_maintenance =
+        #{dev.deviceFaultMaintenance},device_fault_detail = #{dev.deviceFaultDetail}
+        where device_fault_id = #{dev.deviceFaultId}
+    </update>
+
+    <delete id="deleteDeviceFault">
+        delete from device_fault
+        <where>
+            device_fault_id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+</mapper>

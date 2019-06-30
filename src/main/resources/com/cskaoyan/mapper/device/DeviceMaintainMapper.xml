@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.device.DeviceMaintainMapper">
+
+    <select id="queryDeviceMaintainPage" resultMap="queryDeviceMaintain">
+        select a.device_fault_id,a.device_maintain_cost,a.device_maintain_date,
+        b.emp_name,a.device_maintain_emp_id,a.device_maintain_id,a.device_maintain_result,
+        a.note from device_maintain a,employee b where a.device_maintain_emp_id=b.emp_id
+    </select>
+    <resultMap id="queryDeviceMaintain" type="com.cskaoyan.bean.device.DeviceMaintain">
+        <result column="device_fault_id" property="deviceFaultId"/>
+        <result column="device_maintain_cost" property="deviceMaintainCost"/>
+        <result column="device_maintain_date" property="deviceMaintainDate"/>
+        <result column="emp_name" property="deviceMaintainEmp"/>
+        <result column="device_maintain_emp_id" property="deviceMaintainEmpId"/>
+        <result column="device_maintain_id" property="deviceMaintainId"/>
+        <result column="device_maintain_result" property="deviceMaintainResult"/>
+        <result column="note" property="note"/>
+    </resultMap>
+
+    <select id="getDeviceFaultById" resultMap="getDeviceFault">
+        select device_id,device_fault_maintenance,
+        device_fault_id,device_fault_detail,device_fault_date,
+        device_fault_cause from device_fault where device_fault_id = #{id}
+    </select>
+    <resultMap id="getDeviceFault" type="com.cskaoyan.bean.device.DeviceFault">
+        <result column="device_id" property="deviceId"/>
+        <result column="device_fault_maintenance" property="deviceFaultMaintenance"/>
+        <result column="device_fault_id" property="deviceFaultId"/>
+        <result column="device_fault_detail" property="deviceFaultDetail"/>
+        <result column="device_fault_date" property="deviceFaultDate"/>
+        <result column="device_fault_cause" property="deviceFaultCause"/>
+    </resultMap>
+
+    <select id="getDeviceFault" resultMap="getDeviceFault1">
+        select a.device_fault_cause,a.device_fault_date,a.device_fault_detail,
+        a.device_fault_id,a.device_fault_maintenance,a.device_id,b.device_name
+        from device_fault a,device b where a.device_id = b.device_id
+    </select>
+    <resultMap id="getDeviceFault1" type="com.cskaoyan.bean.device.DeviceFault">
+        <result column="device_fault_cause" property="deviceFaultCause"/>
+        <result column="device_fault_date" property="deviceFaultDate"/>
+        <result column="device_fault_detail" property="deviceFaultDetail"/>
+        <result column="device_fault_id" property="deviceFaultId"/>
+        <result column="device_fault_maintenance" property="deviceFaultMaintenance"/>
+        <result column="device_id" property="deviceId"/>
+        <result column="device_name" property="deviceName"/>
+    </resultMap>
+    <insert id="addDeviceMaintain">
+        insert into device_maintain (device_maintain_id,device_fault_id,device_maintain_emp_id,
+        device_maintain_date,device_maintain_result,device_maintain_cost,note) values (#{dev.deviceMaintainId},
+        #{dev.deviceFaultId},#{dev.deviceMaintainEmpId},#{dev.deviceMaintainDate},#{dev.deviceMaintainResult},
+        #{dev.deviceMaintainCost},#{dev.note})
+    </insert>
+    <update id="updateDeviceMaintain">
+         update device_maintain set
+            device_fault_id = #{dev.deviceFaultId},device_maintain_emp_id = #{dev.deviceMaintainEmpId},
+         device_maintain_date = #{dev.deviceMaintainDate},device_maintain_result = #{dev.deviceMaintainResult},
+         device_maintain_cost = #{dev.deviceMaintainCost},note = #{dev.note} where
+         device_maintain_id = #{dev.deviceMaintainId}
+    </update>
+    <delete id="deleteDeviceMaintain">
+        delete from device_maintain
+        <where>
+            device_maintain_id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+</mapper>

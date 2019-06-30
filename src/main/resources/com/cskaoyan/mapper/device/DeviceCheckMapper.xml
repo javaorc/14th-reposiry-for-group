@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.device.DeviceCheckMapper">
+    <select id="queryDeviceCheckPage" resultMap="queryDeviceCheck">
+        select a.device_check_id,a.device_id,b.device_name,a.device_check_emp_id,
+        a.device_check_date,a.device_check_result,a.device_check_fault_id from device_check a,
+        device b where a.device_id =b.device_id
+    </select>
+    <resultMap id="queryDeviceCheck" type="com.cskaoyan.bean.device.DeviceCheck">
+        <result column="device_check_id" property="deviceCheckId"/>
+        <result column="device_id" property="deviceId"/>
+        <result column="device_check_emp_id" property="deviceCheckEmpId"/>
+        <result column="device_check_date" property="deviceCheckDate"/>
+        <result column="device_check_result" property="deviceCheckResult"/>
+        <result column="device_check_fault_id" property="deviceCheckFaultId"/>
+        <result column="device_name" property="deviceName"/>
+    </resultMap>
+
+
+    <insert id="addDeviceCheck">
+        insert into device_check (device_check_id,device_id,device_check_emp_id,device_check_date,
+        device_check_fault_id,device_check_result) values (#{dev.deviceCheckId},#{dev.deviceId},
+        #{dev.deviceCheckEmpId},#{dev.deviceCheckDate},#{dev.deviceCheckFaultId},#{dev.deviceCheckResult})
+    </insert>
+    
+    <select id="getDeviceById" resultMap="getDeviceById">
+      select  device_id,device_keeper_id,device_manufacture_date,device_name,
+    device_purchase_date,device_purchase_price,device_service_life,
+    device_status,device_status_id,device_type_id,note
+    from device where device_id = #{devId}
+    </select>
+    <resultMap id="getDeviceById" type="com.cskaoyan.bean.device.Device">
+        <result column="device_id" property="deviceId"/>
+        <result column="device_keeper_id" property="deviceKeeperId"/>
+        <result column="device_manufacture_date" property="deviceManufactureDate"/>
+        <result column="device_name" property="deviceName"/>
+        <result column="device_purchase_date" property="devicePurchaseDate"/>
+        <result column="device_service_life" property="deviceServiceLife"/>
+        <result column="device_purchase_price" property="devicePurchasePrice"/>
+        <result column="device_status" property="deviceStatus"/>
+        <result column="device_status_id" property="deviceStatusId"/>
+        <result column="device_type_id" property="deviceTypeId"/>
+        <result column="note" property="note"/>
+    </resultMap>
+
+    <select id="getDevice" resultMap="getDevice">
+        select device_id,device_name from device
+    </select>
+    <resultMap id="getDevice" type="com.cskaoyan.bean.device.Device">
+        <result column="device_id" property="deviceId"/>
+        <result column="device_name" property="deviceName"/>
+    </resultMap>
+
+    <select id="getEmployee" resultMap="getEmployee">
+        select emp_id,emp_name,sex,degree,education,education_form,
+        id_code,major,status,department_id from employee
+    </select>
+    <resultMap id="getEmployee" type="com.cskaoyan.bean.employee.Employee">
+        <result column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="sex" property="sex"/>
+        <result column="degree" property="degree"/>
+        <result column="education" property="education"/>
+        <result column="education_form" property="educationForm"/>
+        <result column="id_code" property="idCode"/>
+        <result column="major" property="major"/>
+        <result column="status" property="status"/>
+        <association property="department" javaType="com.cskaoyan.bean.employee.Department">
+            <result column="department_id" property="departmentId"/>
+        </association>
+    </resultMap>
+    <update id="updateDeviceCheck">
+        update device_check set
+        device_id = #{dev.deviceId},device_check_emp_id = #{dev.deviceCheckEmpId},
+        device_check_date = #{dev.deviceCheckDate},device_check_fault_id = #{dev.deviceCheckFaultId},
+        device_check_result = #{dev.deviceCheckResult} where device_check_id =#{dev.deviceCheckId}
+    </update>
+
+    <delete id="deleteDeviceCheck">
+        delete from device_check
+        <where>
+            device_check_id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+</mapper>

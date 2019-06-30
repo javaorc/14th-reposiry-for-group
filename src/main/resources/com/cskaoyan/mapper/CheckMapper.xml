@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.CheckMapper">
+    <resultMap id="selectproductandunqualify" type="com.cskaoyan.bean.Product">
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productType" column="product_type"/>
+        <result property="image" column="image"/>
+        <result property="note" column="note"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="selectProduct" resultType="com.cskaoyan.bean.Product">
+          SELECT
+product_id as productId,
+product_name as productName,
+product_type as productType,
+image,
+note,
+status
+from product
+    </select>
+    <select id="selectproduct" resultMap="selectproductandunqualify">
+        SELECT
+product_id,
+product_name,
+product_type,
+image,
+note,
+status
+from product where product_id=#{def}
+    </select>
+    <resultMap id="selectdepartmentadnemployee" type="com.cskaoyan.bean.Department">
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="note" column="note"/>
+    </resultMap>
+    <select id="selectdepartment" resultMap="selectdepartmentadnemployee">
+        select department_id ,department_name ,note from department where department_id=#{def}
+    </select>
+    <select id="selectDepartment" resultType="com.cskaoyan.bean.Department">
+        select department_id ,department_name ,note from department
+    </select>
+    <resultMap id="selectemployeeAndDepartment" type="com.cskaoyan.bean.Employee">
+        <result property="empId" column="emp_id"/>
+        <result property="empName" column="emp_name"/>
+        <result property="sex" column="sex"/>
+        <result property="idCode" column="id_code"/>
+        <result property="birthday" column="birthday"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="status" column="status"/>
+        <result property="education" column="education"/>
+        <result property="degree" column="degree"/>
+        <result property="major" column="major"/>
+        <result property="graduateSchool" column="graduate_school"/>
+        <result property="educatiomForm" column="edudation_form"/>
+        <association property="department" select="com.cskaoyan.mapper.CheckMapper.selectdepartment" column="department_id"/>
+    </resultMap>
+<select id="selectEmployeeById" resultMap="selectemployeeAndDepartment">
+    select emp_id,emp_name,sex,id_code,birthday,join_date,status,education,degree,major,graduate_school,
+    education_form from employee where emp_id=#{def}
+</select>
+    <resultMap id="selectUnqualifyApplyAndEmployee" type="com.cskaoyan.bean.UnqualifyApply">
+        <result property="unqualifyApplyId" column="unqualify_apply_id"/>
+        <result property="unqualifyItem" column="unqualify_item"/>
+        <result property="unqualifyCount" column="unqualify_count"/>
+        <result property="productId" column="pid"/>
+        <result property="productName" column="pname"/>
+        <result property="empId" column="eid"/>
+        <result property="empName" column="ename"/>
+        <result property="assemblyDate" column="assembly_date"/>
+        <result property="applyDate" column="apply_date"/>
+        <result property="note" column="note"/>
+
+    </resultMap>
+    <select id="selectUnqualifyApply" resultMap="selectUnqualifyApplyAndEmployee">
+    	select unqualify_apply_id,unqualify_item,unqualify_count,assembly_date,apply_date,ua.note,
+        pp.product_id as pid,
+        pp.product_name as pname,
+        ee.emp_id as eid,
+        ee.emp_name as ename
+        from unqualify_apply ua
+        left join product pp on ua.product_id=pp.product_id
+        left join employee ee on ee.emp_id=ua.emp_id;
+
+    </select>
+<select id="getTotalRecordNum" resultType="_int">
+    select count(*) from unqualify_apply
+</select>
+    <select id="selectProductById" resultType="com.cskaoyan.bean.Product">
+          SELECT
+product_id as productId,
+product_name as productName,
+product_type as productType,
+image,
+note,
+status
+from product where product_id=#{def}
+    </select>
+    <select id="selectEmployeeById1" resultType="com.cskaoyan.bean.Employee">
+    select emp_id as empId,
+    emp_name as empName,
+    sex,
+    id_code as idCode,
+    birthday,
+    join_date as joinDate,
+    status,education,degree,major,
+    graduate_school as graduateSchool,
+    education_form as educationForm
+    from employee
+</select>
+    <delete id="unqualifyDeleteBatch">
+        delete from unqualify_apply where unqualify_apply_id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+<select id="selectCustom" resultType="com.cskaoyan.bean.Custom">
+select
+		custom_id as customId,
+		custom_name as customName,
+		full_name as fullName,
+		address,
+		fax,
+		email,
+		owner_name as ownerName,
+		owner_tel as ownerTel,
+		status,
+		note
+		from custom
+</select>
+    <select id="selectOrders" resultMap="selectOrderMAP">
+         select
+        co.order_id as oid,
+        order_date,
+        request_date,
+        co.note as cnote,
+        quantity,
+        unit_price,
+        unit,
+        image,
+        file,
+        co.status as ostatus,
+        co.product_id as coid,
+        cs.custom_id as cid
+        from c_order co
+        left join custom cs on cs.custom_id=co.custom_id
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+    <resultMap id="selectFMC" type="com.cskaoyan.bean.FinalMeasureCheck">
+        <result property="fMeasureCheckId" column="f_measure_check_id"/>
+        <result property="result" column="result"/>
+        <result property="note" column="fnote"/>
+        <result property="cdate" column="cdate"/>
+        <result property="measureData" column="measure_data"/>
+        <result property="empId" column="eid"/>
+        <result property="empName" column="ename"/>
+        <result property="checkItem" column="check_item"/>
+        <result property="orderId" column="orderId"/>
+    </resultMap>
+    <select id="selectFinalMeasureCheck" resultMap="selectFMC">
+        	select
+		f_measure_check_id ,
+		result,
+		fmc.note as fnote,
+		cdate,
+		measure_data,
+		check_item,
+		co.order_id as orderId,
+		ee.emp_id as eid,
+		ee.emp_name as ename
+		from final_measuret_check fmc
+		left join c_order co on co.order_id=fmc.order_id
+		left join employee ee on ee.emp_id=fmc.emp_id
+    </select>
+    <resultMap id="customMap" type="com.cskaoyan.bean.Custom">
+        <result column="custom_id" property="customId"/>
+        <result column="custom_name" property="customName"/>
+        <result column="full_name" property="fullName"/>
+        <result column="address" property="address"/>
+        <result column="fax" property="fax"/>
+        <result column="email" property="email"/>
+        <result column="owner_name" property="ownerName"/>
+        <result column="owner_tel" property="ownerTel"/>
+        <result column="cstatus" property="status"/>
+        <result column="note" property="note"/>
+    </resultMap>
+    <select id="selectcustom" resultMap="customMap">
+select
+custom_id,
+custom_name,
+full_name,
+address,
+fax,
+email,
+owner_name,
+owner_tel,
+`status` as cstatus,
+note
+from custom
+where custom_id=#{def}
+
+    </select>
+    <resultMap id="selectOrderMAP" type="com.cskaoyan.bean.Order">
+        <result property="orderId" column="oid"/>
+        <result property="orderDate" column="order_date"/>
+        <result property="requestDate" column="request_date"/>
+        <result property="note" column="cnote"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="unit" column="unit"/>
+        <result property="image" column="image"/>
+        <result property="file" column="file"/>
+        <result property="status" column="ostatus"/>
+        <association property="custom" select="com.cskaoyan.mapper.CheckMapper.selectcustom" column="cid"/>
+        <collection property="product" select="com.cskaoyan.mapper.CheckMapper.selectproduct" column="coid"/>
+    </resultMap>
+    <select id="selectOrderById" resultMap="selectOrderMAP">
+    select
+        co.order_id as oid,
+        order_date,
+        request_date,
+        co.note as cnote,
+        quantity,
+        unit_price,
+        unit,
+        image,
+        file,
+        co.status as ostatus,
+        co.product_id as coid,
+        cs.custom_id as cid
+        from c_order co
+        left join custom cs on cs.custom_id=co.custom_id
+        where co.order_id=#{def}
+    </select>
+    <select id="selectEmployee" resultMap="selectemployeeAndDepartment">
+    select
+    emp_id as empId,
+    emp_name as empName,
+    sex,id_code as empCode,
+    birthday,join_date as joinDate,
+    status,education,degree,major,graduate_school as graduateSchool,
+    education_form as educationForm
+    from employee
+</select>
+    <insert id="unqualifyInsert">
+	insert unqualify_apply (unqualify_apply_id,unqualify_item,unqualify_count,assembly_date,emp_id,apply_date,note)VALUES(#{unqualifyApplyId},#{unqualifyItem},#{unqualifyCount},#{assemblyDate},#{empId},#{applyDate},#{note})
+    </insert>
+    <update id="updateUnqualifyApply">
+        UPDATE unqualify_apply
+        set
+         unqualify_item=#{unqualifyItem},
+         unqualify_count=#{unqualifyCount},
+        assembly_date=#{assemblyDate},
+        emp_id=#{empId},
+        apply_date=#{applyDate},
+        note=#{note}
+    </update>
+    <insert id="finalmeasurecheckInsert">
+      	insert final_measuret_check(f_measure_check_id,check_item,cdate,measure_data,emp_id,result,note)VALUES
+		(#{fMeasureCheckId},#{checkItem},#{cdate},#{measureData},#{empId},#{result},#{note})
+    </insert>
+    <update id="measureupdateall">
+        	update final_measuret_check
+		set
+		 check_item=#{checkItem},
+		cdate=#{cdate},
+		measure_data=#{measureData},
+		emp_id=#{empId},
+		result=#{result},
+		note=#{note}
+    </update>
+    <delete id="measuredeleteBatch">
+        delete from final_measuret_check where f_measure_check_id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <resultMap id="selectFCCMap" type="com.cskaoyan.bean.FinalCountCheck">
+        <result property="fCountCheckId" column="f_count_check_id" />
+        <result property="cdate" column="cdate" />
+        <result property="checkItem" column="check_item" />
+        <result property="checkNumber" column="check_number" />
+        <result property="empId" column="eid" />
+        <result property="empName" column="ename" />
+        <result property="measureData" column="measure_data" />
+        <result property="note" column="note" />
+        <result property="orderId" column="order_id" />
+        <result property="qualify" column="qualify" />
+        <result property="unqualify" column="unqualify" />
+        <result property="result" column="result" />
+        <result property="sample" column="sample" />
+
+    </resultMap>
+    <select id="selectFinalCountCheck" resultMap="selectFCCMap">
+        select
+		f_count_check_id,
+		cdate,
+		check_item,
+		check_number,
+		ee.emp_id as eid,
+		ee.emp_name as ename,
+		measure_data,
+		note,
+		order_id,
+		qualify,
+		unqualify,
+		result,
+		sample
+		from final_count_check fcc
+		left join employee ee on ee.emp_id=fcc.emp_id
+    </select>
+    <insert id="finalcountcheckInsert">
+        insert final_count_check
+        (f_count_check_id,check_item,sample,check_number,unqualify,
+		qualify,cdate,measure_data,emp_id,result,note)
+		VALUES(#{fCountCheckId},#{checkItem},#{sample},
+		#{checkNumber},#{unqualify},#{qualify},#{cdate},#{measureData},#{empId},#{result},#{note})
+    </insert>
+<update id="fcountcheckupdateall">
+    	update final_count_check
+		set
+		check_item=#{checkItem},
+		sample=#{sample},
+		check_number=#{checkNumber},
+		unqualify=#{unqualify},
+		qualify=#{qualify},
+		cdate=#{cdate},
+		measure_data=#{measureData},
+		emp_id=#{empId},
+		result=#{result},
+		note=#{note}
+</update>
+    <delete id="fcountcheckdeleteBatch">
+        delete from final_count_check where f_count_check_id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+<resultMap id="pmeasureCheckMap" type="com.cskaoyan.bean.ProcessMeasureCheck">
+    <result property="pMeasureCheckId" column="p_measure_check_id"/>
+    <result property="processId" column="process_id"/>
+    <result property="cdate" column="cdate"/>
+    <result property="checkItem" column="check_item"/>
+    <result property="empId" column="eid"/>
+    <result property="empName" column="ename"/>
+    <result property="measureData" column="measure_data"/>
+    <result property="note" column="note"/>
+    <result property="result" column="result"/>
+</resultMap>
+    <select id="selectpmeasureCheck" resultMap="pmeasureCheckMap">
+        select
+		p_measure_check_id,
+		process_id,
+		cdate,
+		check_item,
+		ee.emp_id as eid,
+		ee.emp_name as ename,
+		measure_data,
+		note,
+		result
+		from process_measure_check pmc
+		left join employee ee on ee.emp_id=pmc.emp_id
+    </select>
+
+    <insert id="pmeasurecheckInsert">
+        insert process_measure_check
+		(p_measure_check_id,check_item,cdate,measure_data,emp_id,result,note)
+		values(#{pMeasureCheckId},#{checkItem},#{cdate},#{measureData},#{empId},#{result},#{note})
+    </insert>
+    <resultMap id="technologyMap" type="com.cskaoyan.bean.TechnologyPlan">
+        <result property="technologyPlanId" column="technology_plan_id"/>
+        <result property="batchAmount" column="batch_amount"/>
+        <result property="commitPlan" column="commit_plan"/>
+        <result property="endPlan" column="end_plan"/>
+        <result property="startPlan" column="start_plan"/>
+        <result property="technologyPlanEnd" column="technology_plan_end"/>
+        <result property="technologyPlanStart" column="technology_plan_start"/>
+        <result property="technologyId" column="tid"/>
+    </resultMap>
+    <select id="selecttechnology" resultMap="technologyMap">
+        
+		select 
+		technology_plan_id,
+		batch_amount,
+		commit_plan,
+		end_plan,
+		start_plan,
+		technology_plan_end,
+		technology_plan_start,
+		t.technology_id as tid
+		from technology_plan tp
+		left join technology t on t.technology_id=tp.technology_id
+    </select>
+    <select id="selectprocess" resultType="com.cskaoyan.bean.Process">
+	SELECT
+		process_id as processId,
+		sequence,
+		quota,
+		technology_plan_id AS technologyPlanId
+		FROM
+		process
+    </select>
+    <update id="fmeasurecheckupdateall" >
+       update
+	process_measure_check
+	set
+	check_item=#{checkItem},
+	cdate=#{cdate},
+	measure_data=#{measureData},
+	emp_id=#{empId},
+	result=#{result},
+	note=#{note}
+
+    </update>
+    <delete id="pmeasurecheckdeleteBatch">
+        delete from process_measure_check where p_measure_check_id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+<resultMap id="pcountCheckMap" type="com.cskaoyan.bean.ProcessCountCkeck">
+    <result property="cdate" column="cdate"/>
+    <result property="checkNumber" column="check_number"/>
+    <result property="empId" column="eid"/>
+    <result property="empName" column="ename"/>
+    <result property="measureData" column="measure_data"/>
+    <result property="note" column="note"/>
+    <result property="pCountCheckId" column="p_count_check_id"/>
+    <result property="processId" column="process_id"/>
+    <result property="qualify" column="qualify"/>
+    <result property="unqualify" column="unqualify"/>
+    <result property="result" column="result"/>
+    <result property="sample" column="sample"/>
+    <result property="checkItem" column="check_item"/>
+</resultMap>
+    <select id="selectpcountCheck" resultMap="pcountCheckMap">
+select
+	cdate,
+	check_item,
+	check_number,
+	ee.emp_id as eid,
+	ee.emp_name as ename,
+	measure_data,
+	note,
+	p_count_check_id,
+	process_id,
+	qualify,
+	unqualify,
+	result,
+	sample
+	from
+	process_count_check pcc
+	left join employee ee on ee.emp_id=pcc.emp_id
+    </select>
+    <insert id="pcountcheckInsert">
+        insert process_count_check
+	(p_count_check_id,check_item,sample,check_number,unqualify,qualify,cdate,measure_data,emp_id,result,note)
+	VALUES(#{pCountCheckId},#{checkItem},#{sample},#{checkNumber},#{unqualify},#{qualify},#{cdate},#{measureData},#{empId},#{result},#{note})
+    </insert>
+    <update id="pcountcheckupdateall">
+      update
+      process_count_check
+      set
+      check_item=#{checkItem},
+      sample=#{sample},
+      check_number=#{checkNumber},
+      unqualify=#{unqualify},
+      qualify=#{qualify},
+      cdate=#{cdate},
+      measure_data=#{measureData},
+      emp_id=#{empId},
+      result=#{result},
+      note=#{note}
+    </update>
+    <delete id="pcountcheckdeleteBatch">
+        delete from process_count_check where p_count_check_id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

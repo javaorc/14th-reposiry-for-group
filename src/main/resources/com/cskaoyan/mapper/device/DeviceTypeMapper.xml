@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.device.DeviceTypeMapper">
+
+    <resultMap id="myqueryDeviceType" type="com.cskaoyan.bean.device.DeviceType">
+        <result property="deviceTypeId" column="device_type_id"/>
+        <result property="deviceTypeName" column="device_type_name"/>
+        <result property="deviceTypeModel" column="device_type_model"/>
+        <result property="deviceTypeSpec" column="device_type_spec"/>
+        <result property="deviceTypeSupplier" column="device_type_supplier"/>
+        <result property="deviceTypeProducer" column="device_type_producer"/>
+        <result property="deviceTypeQuantity" column="device_type_quantity"/>
+        <result property="deviceTypeWarranty" column="device_type_warranty"/>
+    </resultMap>
+
+    <insert id="addDeviceType">
+        insert into device_type (device_type_id,device_type_name,device_type_model,device_type_spec,device_type_supplier,device_type_producer,
+device_type_quantity,device_type_warranty) VALUES (#{device.deviceTypeId},#{device.deviceTypeName},
+#{device.deviceTypeModel},#{device.deviceTypeSpec},#{device.deviceTypeSupplier},
+#{device.deviceTypeProducer},#{device.deviceTypeQuantity},#{device.deviceTypeWarranty})
+    </insert>
+
+    <update id="updateDeviceType">
+        update device_type set device_type_name = #{dev.deviceTypeName},
+         device_type_model = #{dev.deviceTypeModel}, device_type_spec = #{dev.deviceTypeSpec},
+         device_type_supplier = #{dev.deviceTypeSupplier},
+         device_type_producer = #{dev.deviceTypeProducer},
+         device_type_quantity = #{dev.deviceTypeQuantity}, device_type_warranty = #{dev.deviceTypeWarranty}
+          WHERE device_type_id = #{dev.deviceTypeId}
+    </update>
+
+
+    <delete id="deleteDeviceType">
+        delete from device_type
+        <where>
+            device_type_id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+    <select id="queryDeviceTypePage" resultMap="myqueryDeviceType">
+        select device_type_id,device_type_name,device_type_model,device_type_spec,
+        device_type_supplier,device_type_producer,device_type_quantity,device_type_warranty
+        from device_type
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.device.DeviceMapper">
+    <select id="queryDevicePage" resultMap="queryDevicePage">
+    select a.device_id,a.device_name,a.device_type_id,a.device_status_id,a.device_status,
+    a.device_purchase_date,a.device_purchase_price,a.device_manufacture_date,
+    a.device_service_life,a.device_keeper_id,a.note,b.device_type_name,c.emp_name
+    from device a,device_type b,employee c where a.device_type_id=b.device_type_id and
+    a.device_keeper_id =c.emp_id
+    </select>
+
+    <resultMap id="queryDevicePage" type="com.cskaoyan.bean.device.Device">
+        <result column="device_id" property="deviceId"/>
+        <result column="device_name" property="deviceName"/>
+        <result column="emp_name" property="deviceKeeper"/>
+        <result column="device_keeper_id" property="deviceKeeperId"/>
+        <result column="device_type_id" property="deviceTypeId"/>
+        <result column="device_status_id" property="deviceStatusId"/>
+        <result column="device_purchase_date" property="devicePurchaseDate"/>
+        <result column="device_purchase_price" property="devicePurchasePrice"/>
+        <result column="device_manufacture_date" property="deviceManufactureDate"/>
+        <result column="device_service_life" property="deviceServiceLife"/>
+        <result column="note" property="note"/>
+        <result column="device_type_name" property="deviceTypeName"/>
+    </resultMap>
+
+    <select id="getDataDeviceType" resultType="com.cskaoyan.bean.device.DeviceType">
+        select device_type_id as deviceTypeId,device_type_name as deviceTypeName from device_type
+    </select>
+
+    <insert id="addDevice">
+        insert into device (device_id,device_name,device_type_id,device_status_id,
+        device_purchase_date,device_purchase_price,device_manufacture_date,
+        device_service_life,note,device_keeper_id) VALUES (#{dev.deviceId},#{dev.deviceName},#{dev.deviceTypeId},
+        #{dev.deviceStatusId},#{dev.devicePurchaseDate},#{dev.devicePurchasePrice},
+        #{dev.deviceManufactureDate},#{dev.deviceServiceLife},#{dev.note},#{dev.deviceKeeperId})
+    </insert>
+
+    <update id="updateDevice">
+        update device set device_name = #{dev.deviceName},device_type_id = #{dev.deviceTypeId},
+        device_status_id = #{dev.deviceStatusId},device_purchase_date = #{dev.devicePurchaseDate},
+        device_purchase_price = #{dev.devicePurchasePrice},device_keeper_id = #{dev.deviceKeeperId},device_manufacture_date = #{dev.deviceManufactureDate},
+        device_service_life = #{dev.deviceServiceLife},note = #{dev.note} where device_id = #{dev.deviceId}
+    </update>
+
+    <delete id="deleteDevice">
+        delete from device
+        <where>
+            device_id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+    <select id="getDeviceTypeById" resultMap="getDeviceTypeById">
+         select device_type_id,device_type_name,device_type_model,device_type_spec,
+        device_type_supplier,device_type_producer,device_type_quantity,device_type_warranty
+        from device_type where device_type_id = #{devId}
+    </select>
+    <resultMap id="getDeviceTypeById" type="com.cskaoyan.bean.device.DeviceType">
+        <result property="deviceTypeId" column="device_type_id"/>
+        <result property="deviceTypeName" column="device_type_name"/>
+        <result property="deviceTypeModel" column="device_type_model"/>
+        <result property="deviceTypeSpec" column="device_type_spec"/>
+        <result property="deviceTypeSupplier" column="device_type_supplier"/>
+        <result property="deviceTypeProducer" column="device_type_producer"/>
+        <result property="deviceTypeQuantity" column="device_type_quantity"/>
+        <result property="deviceTypeWarranty" column="device_type_warranty"/>
+    </resultMap>
+    <select id="getDepartment" resultMap="getDepartment">
+        select department_id,department_name,note from department
+    </select>
+    <resultMap id="getDepartment" type="com.cskaoyan.bean.employee.Department">
+        <result column="department_id" property="departmentId"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="note" property="note"/>
+    </resultMap>
+
+    <select id="getEmployee" resultMap="getEmployee">
+        select a.degree,a.education,a.education_form,a.emp_id,a.emp_name,a.graduate_school,
+        a.id_code,a.join_date,a.major,a.sex,a.status,b.department_id,b.department_name,b.note
+        from employee a,department b where a.department_id = b.department_id and a.emp_id = #{id}
+    </select>
+    <resultMap id="getEmployee" type="com.cskaoyan.bean.employee.Employee">
+        <result column="degree" property="degree"/>
+        <result column="education" property="education"/>
+        <result column="education_form" property="educationForm"/>
+        <result column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="graduate_school" property="graduateSchool"/>
+        <result column="id_code" property="idCode"/>
+        <result column="join_date" property="joinDate"/>
+        <result column="major" property="major"/>
+        <result column="sex" property="sex"/>
+        <result column="status" property="status"/>
+        <association property="department" javaType="com.cskaoyan.bean.employee.Department">
+            <result column="department_id" property="departmentId"/>
+            <result column="department_name" property="departmentName"/>
+            <result column="note" property="note"/>
+        </association>
+
+    </resultMap>
+
+    <update id="updateEmployee">
+        update employee set
+        emp_name = #{em.empName},sex = #{em.sex},
+        department_id = #{em.department.departmentId},id_code = #{em.idCode},
+        education = #{em.education},degree = #{em.degree},major = #{em.major},
+        education_form = #{em.educationForm},birthday = #{em.birthday},join_date = #{em.joinDate},
+        status = #{em.status} where emp_id = #{em.empId}
+
+
+    </update>
+
+</mapper>
